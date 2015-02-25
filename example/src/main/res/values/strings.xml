@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NinePatchBuildUtils Example</string>
+    <string name="nine_patch_builder_example_text">Builder example</string>
+    <string name="nine_patch_inflater_example_text">Inflater example</string>
+
+</resources>
