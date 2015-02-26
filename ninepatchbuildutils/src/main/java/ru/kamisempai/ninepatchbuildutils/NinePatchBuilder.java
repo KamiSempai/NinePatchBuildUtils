@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.NinePatch;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -68,6 +68,10 @@ public class NinePatchBuilder {
 
     // TODO Add removeStretchArea methods
 
+    public void setPadding(float left, float top, float right, float bottom) {
+        setPadding(new RectF(left, top, right, bottom));
+    }
+    
     public void setPadding(RectF padding) {
         mPadding = padding;
     }
@@ -97,14 +101,18 @@ public class NinePatchBuilder {
 
     public Drawable build() throws IllegalStateException {
         ensureParams();
+        Drawable drawable = null;
         if (mBitmap != null)
-            return buildFromBitmap(mBitmap);
+            drawable = buildFromBitmap(mBitmap);
         if (mBitmapResId != 0)
-            return buildFromBitmap(BitmapFactory.decodeResource(mResources, mBitmapResId));
+            drawable = buildFromBitmap(BitmapFactory.decodeResource(mResources, mBitmapResId));
         if (mDrawableResId != 0)
-            return buildFromDrawable(mDrawableResId, mDrawableWidth, mDrawableHeight);
+            drawable = buildFromDrawable(mDrawableResId, mDrawableWidth, mDrawableHeight);
 
-        throw new IllegalStateException("Hm. This is should not happen.");
+        if (drawable == null)
+            throw new IllegalStateException("Hm. This is should not happen.");
+        
+        return drawable;
     }
 
     public void reset() {
@@ -116,7 +124,11 @@ public class NinePatchBuilder {
     }
 
     private Drawable buildFromBitmap(Bitmap bitmap) {
-        return new NinePatchDrawable(mResources, buildNinePatch(bitmap));
+        return new NinePatchDrawable(mResources,
+                bitmap,
+                getChunkByteArray(bitmap.getWidth(), bitmap.getHeight()),
+                getPaddingRect(bitmap.getWidth(), bitmap.getHeight()),
+                mSrcName);
     }
 
     private Drawable buildFromDrawable(int drawableId, int imageWidth, int imageHeight) {
@@ -171,10 +183,6 @@ public class NinePatchBuilder {
         drawable.draw(canvas);
 
         return buildFromBitmap(bitmap);
-    }
-
-    private NinePatch buildNinePatch(Bitmap bitmap) {
-        return new NinePatch(bitmap, getChunkByteArray(bitmap.getWidth(), bitmap.getHeight()), mSrcName);
     }
 
     private void resetImage() {
@@ -247,6 +255,15 @@ public class NinePatchBuilder {
             buffer.putInt(NO_COLOR);
 
         return buffer.array();
+    }
+
+    private Rect getPaddingRect(int imageWidth, int imageHeight) {
+        if (mPadding != null)
+            return new Rect((int) (imageWidth * mPadding.left),
+                            (int) (imageHeight * mPadding.top),
+                            (int) (imageWidth * mPadding.right),
+                            (int) (imageHeight * mPadding.bottom));
+        return null;
     }
 
     private static ArrayList<StretchAreaInt> toInt(ArrayList<StretchAreaFloat> areas, int size) {
