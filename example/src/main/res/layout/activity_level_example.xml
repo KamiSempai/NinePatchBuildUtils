@@ -8,14 +8,10 @@
     android:orientation="vertical">
 
     <FrameLayout
+        android:id="@+id/builder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
-        
-        <ImageView
-            android:id="@+id/builder"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,14 +22,10 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/inflater"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
-
-        <ImageView
-            android:id="@+id/inflater"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
         <TextView
             android:layout_width="wrap_content"

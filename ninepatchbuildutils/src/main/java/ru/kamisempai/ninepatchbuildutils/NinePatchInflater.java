@@ -67,11 +67,11 @@ public class NinePatchInflater {
 
         float[] stretchX = split(a.getString(R.styleable.NinePatchPlusDrawable_stretchX));
         for (int i = 0; i < stretchX.length / 2; i++)
-            builder.addStretchAreaX(stretchX[i*2], stretchX[i*2 + 1]);
+            builder.addStretchSegmentX(stretchX[i * 2], stretchX[i * 2 + 1]);
 
         float[] stretchY = split(a.getString(R.styleable.NinePatchPlusDrawable_stretchY));
         for (int i = 0; i < stretchY.length / 2; i++)
-            builder.addStretchAreaY(stretchY[i * 2], stretchY[i * 2 + 1]);
+            builder.addStretchSegmentY(stretchY[i * 2], stretchY[i * 2 + 1]);
 
         a.recycle();
 

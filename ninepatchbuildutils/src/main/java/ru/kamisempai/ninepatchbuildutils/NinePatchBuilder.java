@@ -42,8 +42,8 @@ public class NinePatchBuilder {
 
     private Resources mResources;
 
-    private ArrayList<StretchAreaFloat> mStretchX = new ArrayList<>();
-    private ArrayList<StretchAreaFloat> mStretchY = new ArrayList<>();
+    private ArrayList<StretchSegmentFloat> mStretchX = new ArrayList<>();
+    private ArrayList<StretchSegmentFloat> mStretchY = new ArrayList<>();
     private RectF mPadding;
 
     private Bitmap mBitmap;
@@ -58,12 +58,12 @@ public class NinePatchBuilder {
         mResources = resources;
     }
 
-    public void addStretchAreaX(float a, float b) {
-        combine(mStretchX, new StretchAreaFloat(a, b));
+    public void addStretchSegmentX(float a, float b) {
+        combine(mStretchX, new StretchSegmentFloat(a, b));
     }
 
-    public void addStretchAreaY(float a, float b) {
-        combine(mStretchY, new StretchAreaFloat(a, b));
+    public void addStretchSegmentY(float a, float b) {
+        combine(mStretchY, new StretchSegmentFloat(a, b));
     }
 
     // TODO Add removeStretchArea methods
@@ -196,30 +196,30 @@ public class NinePatchBuilder {
             throw new IllegalStateException("Please, set image via setBitmap or setDrawable before calling build methods.");
     }
 
-    private void combine(ArrayList<StretchAreaFloat> areasList, StretchAreaFloat area) {
-        // TODO Combine crossed sectors
-        areasList.add(area);
+    private void combine(ArrayList<StretchSegmentFloat> segmentList, StretchSegmentFloat segment) {
+        // TODO Combine crossed segments
+        segmentList.add(segment);
     }
 
     private byte[] getChunkByteArray(int imageWidth, int imageHeight) {
-        ArrayList<StretchAreaInt> areasX = toInt(mStretchX, imageWidth);
-        ArrayList<StretchAreaInt> areasY = toInt(mStretchY, imageHeight);
-        byte colorsArraySize = getColorArraySize(areasX, areasY, imageWidth, imageHeight);
+        ArrayList<StretchSegmentInt> segmentsX = toInt(mStretchX, imageWidth);
+        ArrayList<StretchSegmentInt> segmentsY = toInt(mStretchY, imageHeight);
+        byte regionsCount = getRegionsCount(segmentsX, segmentsY, imageWidth, imageHeight);
 
         ByteBuffer buffer = ByteBuffer.allocate(
                         BYTES_COUNT_WITHOUT_STRETCH_AND_COLORS
-                        + areasX.size() * StretchAreaInt.BYTES_PER_ITEM
-                        + areasY.size() * StretchAreaInt.BYTES_PER_ITEM
-                        + colorsArraySize * BYTES_PER_INT).order(ByteOrder.nativeOrder());
+                        + segmentsX.size() * StretchSegmentInt.BYTES_PER_ITEM
+                        + segmentsY.size() * StretchSegmentInt.BYTES_PER_ITEM
+                        + regionsCount * BYTES_PER_INT).order(ByteOrder.nativeOrder());
 
         // Should be 0x01
-        buffer.put((byte)0x01);
+        buffer.put((byte) 0x01);
         // Stretch x size
-        buffer.put((byte) (areasX.size() * StretchAreaInt.VALUES_COUNT));
+        buffer.put((byte) (segmentsX.size() * StretchSegmentInt.VALUES_COUNT));
         // Stretch y size
-        buffer.put((byte) (areasY.size() * StretchAreaInt.VALUES_COUNT));
+        buffer.put((byte) (segmentsY.size() * StretchSegmentInt.VALUES_COUNT));
         // Color size
-        buffer.put(colorsArraySize);
+        buffer.put(regionsCount);
 
         // Skip 8 bytes
         buffer.putInt(0);
@@ -243,15 +243,17 @@ public class NinePatchBuilder {
         buffer.putInt(0);
 
         // Stretch areas
-        for (StretchAreaInt area: areasX) {
-            buffer.putInt(area.getA());
-            buffer.putInt(area.getB());
+        for (StretchSegmentInt segment: segmentsX) {
+            buffer.putInt(segment.getA());
+            buffer.putInt(segment.getB());
         }
-        for (StretchAreaInt area: areasY) {
-            buffer.putInt(area.getA());
-            buffer.putInt(area.getB());
+        for (StretchSegmentInt segment: segmentsY) {
+            buffer.putInt(segment.getA());
+            buffer.putInt(segment.getB());
         }
-        for (byte i = 0; i < colorsArraySize; i++)
+
+        // TODO If region has no any visible pixel, color should be TRANSPARENT_COLOR
+        for (byte i = 0; i < regionsCount; i++)
             buffer.putInt(NO_COLOR);
 
         return buffer.array();
@@ -266,39 +268,39 @@ public class NinePatchBuilder {
         return null;
     }
 
-    private static ArrayList<StretchAreaInt> toInt(ArrayList<StretchAreaFloat> areas, int size) {
-        ArrayList<StretchAreaInt> result = new ArrayList<>(areas.size());
-        for (StretchAreaFloat areaFloat: areas) {
-            int a = (int) (areaFloat.getA() * size);
-            int b = (int) (areaFloat.getB() * size);
+    private static ArrayList<StretchSegmentInt> toInt(ArrayList<StretchSegmentFloat> segments, int size) {
+        ArrayList<StretchSegmentInt> result = new ArrayList<>(segments.size());
+        for (StretchSegmentFloat segmentFloat: segments) {
+            int a = (int) (segmentFloat.getA() * size);
+            int b = (int) (segmentFloat.getB() * size);
             // TODO Combine crossed sectors
-            result.add(new StretchAreaInt(a, b));
+            result.add(new StretchSegmentInt(a, b));
         }
         return result;
     }
 
-    private byte getColorArraySize(ArrayList<StretchAreaInt> areasX, ArrayList<StretchAreaInt> areasY, int imageWidth, int imageHeight) {
-        return (byte) (getSectorsCount(areasX, imageWidth) * getSectorsCount(areasY, imageHeight));
+    private byte getRegionsCount(ArrayList<StretchSegmentInt> segmentsX, ArrayList<StretchSegmentInt> segmentsY, int imageWidth, int imageHeight) {
+        return (byte) (getSegmentsCount(segmentsX, imageWidth) * getSegmentsCount(segmentsY, imageHeight));
     }
 
-    private static byte getSectorsCount(ArrayList<StretchAreaInt> areas, int size) {
-        if (areas.size() == 0)
+    private static byte getSegmentsCount(ArrayList<StretchSegmentInt> segments, int size) {
+        if (segments.size() == 0)
             return 1;
-        byte sectorsCount = (byte) (areas.size() * 2);
-        if (areas.get(0).getA() > 0)
-            sectorsCount++;
-        if (areas.get(areas.size() - 1).getB() == size)
-            sectorsCount--;
+        byte regionsCount = (byte) (segments.size() * 2);
+        if (segments.get(0).getA() > 0)
+            regionsCount++;
+        if (segments.get(segments.size() - 1).getB() == size)
+            regionsCount--;
 
-        return sectorsCount;
+        return regionsCount;
     }
 
 
-    private class StretchAreaFloat {
+    private class StretchSegmentFloat {
         private float a;
         private float b;
 
-        public StretchAreaFloat(float a, float b) {
+        public StretchSegmentFloat(float a, float b) {
             this.a = a;
             this.b = b;
         }
@@ -320,14 +322,14 @@ public class NinePatchBuilder {
         }
     }
 
-    private static final class StretchAreaInt {
+    private static final class StretchSegmentInt {
         public static final byte VALUES_COUNT = 2;
         public static final byte BYTES_PER_ITEM = BYTES_PER_INT * VALUES_COUNT;
 
         private int a;
         private int b;
 
-        public StretchAreaInt(int a, int b) {
+        public StretchSegmentInt(int a, int b) {
             this.a = a;
             this.b = b;
         }

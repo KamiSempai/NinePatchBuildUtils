@@ -23,4 +23,8 @@ public class MainActivity extends Activity {
     public void onLevelListExampleClick(View view) {
         startActivity(new Intent(this, LevelListExampleActivity.class));
     }
+
+    public void onAnimationListExampleClick(View view) {
+        startActivity(new Intent(this, AnimationListExampleActivity.class));
+    }
 }

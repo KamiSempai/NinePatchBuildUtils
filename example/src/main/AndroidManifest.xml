@@ -18,6 +18,7 @@
         </activity>
         <activity android:name=".StateListExampleActivity"/>
         <activity android:name=".LevelListExampleActivity"/>
+        <activity android:name=".AnimationListExampleActivity"/>
     </application>
 
 </manifest>

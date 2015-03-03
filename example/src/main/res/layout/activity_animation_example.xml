@@ -6,13 +6,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical">
-    
+
     <FrameLayout
         android:id="@+id/builder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:clickable="true">
+        android:clickable="true"
+        android:onClick="onClick">
 
         <TextView
             android:layout_width="wrap_content"
@@ -21,13 +22,14 @@
             android:text="@string/nine_patch_builder_example_text"
             android:layout_gravity="center" />
     </FrameLayout>
-    
+
     <FrameLayout
         android:id="@+id/inflater"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:clickable="true">
+        android:clickable="true"
+        android:onClick="onClick">
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,11 +38,11 @@
             android:text="@string/nine_patch_inflater_example_text"
             android:layout_gravity="center" />
     </FrameLayout>
-
+    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/state_example_text"
+        android:text="@string/animation_example_text"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center_horizontal"/>
 </LinearLayout>

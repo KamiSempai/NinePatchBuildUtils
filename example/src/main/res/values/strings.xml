@@ -4,5 +4,7 @@
     <string name="app_name">NinePatchBuildUtils Example</string>
     <string name="nine_patch_builder_example_text">Builder example</string>
     <string name="nine_patch_inflater_example_text">Inflater example</string>
+    <string name="state_example_text">Click to change state.</string>
+    <string name="animation_example_text">Click to start animation.</string>
 
 </resources>
