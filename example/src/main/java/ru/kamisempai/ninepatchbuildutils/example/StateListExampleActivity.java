@@ -19,14 +19,14 @@ public class StateListExampleActivity extends BaseActivity {
 
         Resources resources = getResources();
 
-        NinePatchBuilder ninePatсhBuilder = new NinePatchBuilder(resources);
-        ninePatсhBuilder.addStretchSegmentX(0.65f, 0.66f);
-        ninePatсhBuilder.addStretchSegmentY(0.45f, 0.46f);
-        ninePatсhBuilder.setDrawable(R.drawable.vector_state_list,
-                (int) resources.getDimension(R.dimen.vector_border_width),
-                (int) resources.getDimension(R.dimen.vector_border_height));
+        NinePatchBuilder ninePatchBuilder = new NinePatchBuilder(resources)
+            .addStretchSegmentX(0.65f, 0.66f)
+            .addStretchSegmentY(0.45f, 0.46f)
+            .setDrawable(R.drawable.vector_state_list,
+                    (int) resources.getDimension(R.dimen.vector_border_width),
+                    (int) resources.getDimension(R.dimen.vector_border_height));
 
-        findViewById(R.id.builder).setBackground(ninePatсhBuilder.build());
+        findViewById(R.id.builder).setBackground(ninePatchBuilder.build());
 
         findViewById(R.id.inflater).setBackground(NinePatchInflater.inflate(resources, R.xml.vector_state_list_nine_patch));
     }

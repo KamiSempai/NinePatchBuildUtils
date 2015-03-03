@@ -58,43 +58,50 @@ public class NinePatchBuilder {
         mResources = resources;
     }
 
-    public void addStretchSegmentX(float a, float b) {
+    public NinePatchBuilder addStretchSegmentX(float a, float b) {
         combine(mStretchX, new StretchSegmentFloat(a, b));
+        return this;
     }
 
-    public void addStretchSegmentY(float a, float b) {
+    public NinePatchBuilder addStretchSegmentY(float a, float b) {
         combine(mStretchY, new StretchSegmentFloat(a, b));
+        return this;
     }
 
     // TODO Add removeStretchArea methods
 
-    public void setPadding(float left, float top, float right, float bottom) {
-        setPadding(new RectF(left, top, right, bottom));
+    public NinePatchBuilder setPadding(float left, float top, float right, float bottom) {
+         return setPadding(new RectF(left, top, right, bottom));
     }
     
-    public void setPadding(RectF padding) {
+    public NinePatchBuilder setPadding(RectF padding) {
         mPadding = padding;
+        return this;
     }
 
-    public void setBitmap(int resId) {
+    public NinePatchBuilder setBitmap(int resId) {
         resetImage();
         mBitmapResId = resId;
+        return this;
     }
 
-    public void setBitmap(Bitmap bitmap) {
+    public NinePatchBuilder setBitmap(Bitmap bitmap) {
         resetImage();
         mBitmap = bitmap;
+        return this;
     }
 
-    public void setDrawable(int drawableResId, int imageWidth, int imageHeight) {
+    public NinePatchBuilder setDrawable(int drawableResId, int imageWidth, int imageHeight) {
         resetImage();
         mDrawableResId = drawableResId;
         mDrawableWidth = imageWidth;
         mDrawableHeight = imageHeight;
+        return this;
     }
 
-    public void setName(String srcName) {
+    public NinePatchBuilder setName(String srcName) {
         mSrcName = srcName;
+        return this;
     }
 
     // TODO Add get methods

@@ -6,13 +6,13 @@ Utils to provide easy way of creation NinePatchDrawable from any Drawable.
 ### NinePatchBuilder
 As example you can convert VectorDrawable to NinePatchDrawable
 ```java
-NinePatchBuilder ninePathBuilder = new NinePatchBuilder(resources);
-ninePathBuilder.addStretchAreaX(0.65f, 0.66f);
-ninePathBuilder.addStretchAreaY(0.45f, 0.46f);
-ninePathBuilder.setDrawable(R.drawable.vector_state_list,
-        (int) resources.getDimension(R.dimen.vector_border_width),
-        (int) resources.getDimension(R.dimen.vector_border_height));
-findViewById(R.id.content).setBackground(ninePathBuilder.build());
+NinePatchBuilder ninePatchBuilder = new NinePatchBuilder(resources)
+    .addStretchSegmentX(0.65f, 0.66f)
+    .addStretchSegmentY(0.45f, 0.46f)
+    .setDrawable(R.drawable.vector_state_list,
+            (int) resources.getDimension(R.dimen.vector_border_width),
+            (int) resources.getDimension(R.dimen.vector_border_height));
+findViewById(R.id.content).setBackground(ninePatchBuilder.build());
 ```
 
 ### NinePatchInflater

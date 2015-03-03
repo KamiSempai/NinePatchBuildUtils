@@ -24,14 +24,14 @@ public class LevelListExampleActivity extends BaseActivity {
 
         Resources resources = getResources();
 
-        NinePatchBuilder ninePathBuilder = new NinePatchBuilder(resources);
-        ninePathBuilder.addStretchSegmentX(0.65f, 0.66f);
-        ninePathBuilder.addStretchSegmentY(0.45f, 0.46f);
-        ninePathBuilder.setDrawable(R.drawable.vector_level_list,
-                (int) resources.getDimension(R.dimen.vector_border_width),
-                (int) resources.getDimension(R.dimen.vector_border_height));
+        NinePatchBuilder ninePatchBuilder = new NinePatchBuilder(resources)
+            .addStretchSegmentX(0.65f, 0.66f)
+            .addStretchSegmentY(0.45f, 0.46f)
+            .setDrawable(R.drawable.vector_level_list,
+                    (int) resources.getDimension(R.dimen.vector_border_width),
+                    (int) resources.getDimension(R.dimen.vector_border_height));
         
-        mBuilderDrawable = (LevelListDrawable) ninePathBuilder.build();
+        mBuilderDrawable = (LevelListDrawable) ninePatchBuilder.build();
         findViewById(R.id.builder).setBackground(mBuilderDrawable);
 
         mInflaterDrawable = (LevelListDrawable) NinePatchInflater.inflate(resources, R.xml.vector_level_list_nine_patch);

@@ -22,14 +22,14 @@ public class AnimationListExampleActivity extends BaseActivity {
 
         Resources resources = getResources();
 
-        NinePatchBuilder ninePathBuilder = new NinePatchBuilder(resources);
-        ninePathBuilder.addStretchSegmentX(0.65f, 0.66f);
-        ninePathBuilder.addStretchSegmentY(0.45f, 0.46f);
-        ninePathBuilder.setDrawable(R.drawable.vector_animation,
-                (int) resources.getDimension(R.dimen.vector_border_width),
-                (int) resources.getDimension(R.dimen.vector_border_height));
+        NinePatchBuilder ninePatchBuilder = new NinePatchBuilder(resources)
+            .addStretchSegmentX(0.65f, 0.66f)
+            .addStretchSegmentY(0.45f, 0.46f)
+            .setDrawable(R.drawable.vector_animation,
+                    (int) resources.getDimension(R.dimen.vector_border_width),
+                    (int) resources.getDimension(R.dimen.vector_border_height));
 
-        findViewById(R.id.builder).setBackground(ninePathBuilder.build());
+        findViewById(R.id.builder).setBackground(ninePatchBuilder.build());
 
         findViewById(R.id.inflater).setBackground(NinePatchInflater.inflate(resources, R.xml.vector_animation_list_nine_patch));
     }
