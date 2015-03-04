@@ -133,14 +133,14 @@ public class NinePatchBuilder {
     private Drawable buildFromBitmap(Bitmap bitmap) {
         return new NinePatchDrawable(mResources,
                 bitmap,
-                getChunkByteArray(bitmap.getWidth(), bitmap.getHeight()),
+                getChunkByteArray(bitmap),
                 getPaddingRect(bitmap.getWidth(), bitmap.getHeight()),
                 mSrcName);
     }
 
     private Drawable buildFromDrawable(int drawableId, int imageWidth, int imageHeight) {
         Drawable drawable = mResources.getDrawable(drawableId);
-        
+
         // There is no ned to create NinePatchDrawable from NinePatchDrawable.
         if (drawable instanceof NinePatchDrawable)
             return drawable;
@@ -151,7 +151,7 @@ public class NinePatchBuilder {
             if (bitmap.getWidth() == imageWidth && bitmap.getHeight() == imageHeight)
                 return buildFromBitmap(bitmap);
         }
-        
+
         // Support for DrawableContainer and heir extensions.
         if (drawable instanceof DrawableContainer) {
             final XmlPullParser parser = mResources.getXml(drawableId);
@@ -208,7 +208,9 @@ public class NinePatchBuilder {
         segmentList.add(segment);
     }
 
-    private byte[] getChunkByteArray(int imageWidth, int imageHeight) {
+    private byte[] getChunkByteArray(Bitmap bitmap) {
+        int imageWidth = bitmap.getWidth();
+        int imageHeight = bitmap.getHeight();
         ArrayList<StretchSegmentInt> segmentsX = toInt(mStretchX, imageWidth);
         ArrayList<StretchSegmentInt> segmentsY = toInt(mStretchY, imageHeight);
         byte regionsCount = getRegionsCount(segmentsX, segmentsY, imageWidth, imageHeight);
