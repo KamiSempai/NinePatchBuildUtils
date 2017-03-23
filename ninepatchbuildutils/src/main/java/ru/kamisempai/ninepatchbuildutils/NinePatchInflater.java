@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2017 Denis Shurygin. All rights reserved.
+ * Licensed under the Apache License, Version 2.0
+ */
 package ru.kamisempai.ninepatchbuildutils;
 
 import android.content.res.Resources;
@@ -14,7 +18,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Created by Shurygin Denis on 07.02.2015.
+ * @author Shurygin Denis on 07.02.2015.
  */
 public class NinePatchInflater {
     public static final String TAG = NinePatchInflater.class.getSimpleName();

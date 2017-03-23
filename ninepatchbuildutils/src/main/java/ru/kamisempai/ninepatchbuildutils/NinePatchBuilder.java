@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2017 Denis Shurygin. All rights reserved.
+ * Licensed under the Apache License, Version 2.0
+ */
 package ru.kamisempai.ninepatchbuildutils;
 
 import android.content.res.Resources;
@@ -24,7 +28,7 @@ import java.util.ArrayList;
 /**
  * Builder class for NinePatch objects.
  * <br><br>
- * Created by Shurygin Denis on 2015-02-06.
+ * @author Shurygin Denis on 2015-02-06.
  */
 public class NinePatchBuilder {
     public static final String TAG = NinePatchBuilder.class.getSimpleName();
