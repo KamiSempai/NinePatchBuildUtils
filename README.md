@@ -1,6 +1,6 @@
 NinePatchBuildUtils
 ==========
-Utils to provide easy way of creation NinePatchDrawable from any Drawable.
+Utility that provide easy creation of NinePatchDrawable from any Drawable.
 
 ## Usage
 ### NinePatchBuilder
